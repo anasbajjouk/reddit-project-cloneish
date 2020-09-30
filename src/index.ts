@@ -1,15 +1,13 @@
-import {MikroORM} from "@mikro-orm/core"
+import { MikroORM } from "@mikro-orm/core";
 import { ___prod___ } from "./constants";
+import { Post } from "./entities/Post";
+import microConfig from "./mikro-orm.config";
 
-const main = async ()=>{
-    const orm = await MikroORM.init({
-        entities:[],
-        dbName: 'reddit-project',
-        user: 'postgres',
-        password: '123456',
-        debug: !___prod___,
-        type: 'postgresql'
-    })
-}
+const main = async () => {
+  const orm = await MikroORM.init(microConfig);
 
-console.log("hellooooooo");
+  const post = orm.em.create(Post, { title: "my first post" });
+  await orm.em.persistAndFlush(post);
+};
+
+main().catch((err) => console.error("ERRORrr: ", err));
